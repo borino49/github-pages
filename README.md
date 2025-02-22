@@ -1,75 +1,171 @@
-<header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'inscription - AFECI MarketPlace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+        img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #004080;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, select {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            border-color: #004080;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 64, 128, 0.5);
+        }
+        button {
+            background-color: #004080;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #002060;
+        }
+        #autreCompetence {
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+    <div class="container">
+        <img src="logo_afeci.jpg" alt="AFECI LOGO"> <!-- Remplacez par le chemin correct de votre logo -->
+        <h2>Formulaire d'inscription - AFECI MarketPlace</h2>
 
-# GitHub Pages
+        <form id="afeciForm" onsubmit="return envoyerWhatsApp(event)">
+            <input type="text" id="nom" placeholder="Nom & Prénoms" required>
+            <span id="nomError" class="error">Veuillez entrer votre nom et prénoms.</span>
 
-_Create a site or blog from your GitHub repositories with GitHub Pages._
+            <input type="tel" id="whatsapp" placeholder="Numéro WhatsApp" required pattern="[0-9]+" title="Entrez un numéro valide">
+            <span id="whatsappError" class="error">Veuillez entrer un numéro WhatsApp valide.</span>
 
-</header>
+            <select id="competence" required onchange="afficherChampAutre()">
+                <option value="">Sélectionnez votre compétence</option>
+                <option value="Développement Web">Développement Web</option>
+                <option value="Développement Mobile">Développement Mobile</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Marketing Digital">Marketing Digital</option>
+                <option value="Gestion de projet">Gestion de projet</option>
+                <option value="Autre">Autre</option>
+            </select>
+            <span id="competenceError" class="error">Veuillez sélectionner une compétence.</span>
 
-<!--
-  <<< Author notes: Course start >>>
-  Include start button, a note about Actions minutes,
-  and tell the learner why they should take the course.
--->
+            <input type="text" id="autreCompetence" placeholder="Précisez votre compétence">
+            <span id="autreCompetenceError" class="error">Veuillez préciser votre compétence.</span>
 
-## Welcome
+            <button type="submit">Envoyer l'inscription</button>
+        </form>
+    </div>
 
-With GitHub Pages, you can host project blogs, documentation, resumes, portfolios, or any other static content you'd like. Your GitHub repository can easily become its own website. In this course, we'll show you how to set up your own site or blog using GitHub Pages.
+    <script>
+        function afficherChampAutre() {
+            const competence = document.getElementById("competence").value;
+            const autreCompetence = document.getElementById("autreCompetence");
 
-- **Who is this for**: Beginners, students, project maintainers, small businesses.
-- **What you'll learn**: How to build a GitHub Pages site.
-- **What you'll build**: We'll build a simple GitHub Pages site with a blog. We'll use [Jekyll](https://jekyllrb.com), a static site generator.
-- **Prerequisites**: If you need to learn about branches, commits, and pull requests, take [Introduction to GitHub](https://github.com/skills/introduction-to-github) first.
-- **How long**: This course takes less than one hour to complete.
+            if (competence === "Autre") {
+                autreCompetence.style.display = "block";
+                autreCompetence.setAttribute("required", "true");
+            } else {
+                autreCompetence.style.display = "none";
+                autreCompetence.removeAttribute("required");
+                autreCompetence.value = "";
+            }
+        }
 
-In this course, you will:
+        function envoyerWhatsApp(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
 
-1. Enable GitHub Pages
-2. Configure your site
-3. Customize your home page
-4. Create a blog post
-5. Merge your pull request
+            // Récupération des valeurs
+            const nom = document.getElementById("nom").value.trim();
+            const whatsapp = document.getElementById("whatsapp").value.trim();
+            const competence = document.getElementById("competence").value;
+            const autreCompetence = document.getElementById("autreCompetence").value.trim();
 
-### How to start this course
+            // Réinitialisation des messages d'erreur
+            document.getElementById("nomError").style.display = "none";
+            document.getElementById("whatsappError").style.display = "none";
+            document.getElementById("competenceError").style.display = "none";
+            document.getElementById("autreCompetenceError").style.display = "none";
 
-<!-- For start course, run in JavaScript:
-'https://github.com/new?' + new URLSearchParams({
-  template_owner: 'skills',
-  template_name: 'github-pages',
-  owner: '@me',
-  name: 'skills-github-pages',
-  description: 'My clone repository',
-  visibility: 'public',
-}).toString()
--->
+            // Validation des champs
+            let isValid = true;
 
-[![start-course](https://user-images.githubusercontent.com/1221423/235727646-4a590299-ffe5-480d-8cd5-8194ea184546.svg)](https://github.com/new?template_owner=skills&template_name=github-pages&owner=%40me&name=skills-github-pages&description=My+clone+repository&visibility=public)
+            if (nom === "") {
+                document.getElementById("nomError").style.display = "block";
+                isValid = false;
+            }
+            if (whatsapp === "" || !/^[0-9]+$/.test(whatsapp)) {
+                document.getElementById("whatsappError").style.display = "block";
+                isValid = false;
+            }
+            if (competence === "") {
+                document.getElementById("competenceError").style.display = "block";
+                isValid = false;
+            }
+            if (competence === "Autre" && autreCompetence === "") {
+                document.getElementById("autreCompetenceError").style.display = "block";
+                isValid = false;
+            }
 
-1. Right-click **Start course** and open the link in a new tab.
-2. In the new tab, most of the prompts will automatically fill in for you.
-   - For owner, choose your personal account or an organization to host the repository.
-   - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
-   - Scroll down and click the **Create repository** button at the bottom of the form.
-3. After your new repository is created, wait about 20 seconds, then refresh the page. Follow the step-by-step instructions in the new repository's README.
+            if (!isValid) return;
 
-<footer>
+            // Préparation du message WhatsApp
+            const competenceFinale = (competence === "Autre") ? autreCompetence : competence;
+            const message = `Nouvelle inscription AFECI :%0A👤 Nom : ${nom}%0A📱 WhatsApp : ${whatsapp}%0A💼 Compétence : ${competenceFinale}`;
+            const numeroWhatsApp = "2250787052416";
 
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
+            // Redirection vers WhatsApp
+            const lienWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${message}`;
+            window.location.href = lienWhatsApp;
+        }
+    </script>
 
----
-
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
-
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
-
-</footer>
+</body>
+</html>
